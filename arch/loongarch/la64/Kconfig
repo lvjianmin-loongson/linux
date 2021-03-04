@@ -1,0 +1,81 @@
+# SPDX-License-Identifier: GPL-2.0
+if MACH_LOONGSON64
+
+choice
+	prompt "Machine Type"
+
+config LOONGSON_MACH3X
+	bool "Generic Loongson 3 family machines"
+	select ARCH_SPARSEMEM_ENABLE
+	select ARCH_MIGHT_HAVE_PC_PARPORT
+	select ARCH_MIGHT_HAVE_PC_SERIO
+	select GENERIC_ISA_DMA_SUPPORT_BROKEN
+	select BOOT_ELF32
+	select BOARD_SCACHE
+	select CSRC_R4K
+	select CEVT_R4K
+	select CPU_HAS_WB
+	select HAVE_CLK
+	select HW_HAS_PCI
+	select ISA
+	select HT_PCI
+	select IRQ_LOONGARCH_CPU
+	select NR_CPUS_DEFAULT_4
+	select SPARSE_IRQ
+	select SYS_HAS_CPU_LOONGSON3
+	select SYS_HAS_EARLY_PRINTK
+	select SYS_SUPPORTS_SMP
+	select SYS_SUPPORTS_HOTPLUG_CPU
+	select SYS_SUPPORTS_NUMA
+	select SYS_SUPPORTS_64BIT_KERNEL
+	select SYS_SUPPORTS_HIGHMEM
+	select SYS_SUPPORTS_LITTLE_ENDIAN
+	select LOONGSON_MC146818
+	select ZONE_DMA32
+	select DMA_MAYBE_COHERENT
+	select LEFI_FIRMWARE_INTERFACE
+	select USE_OF
+	select BUILTIN_DTB
+
+	help
+		Generic Loongson 3 family machines utilize the 3A/3B revision
+		of Loongson processor and LS7A chipset.
+endchoice
+
+config LOONGSON_HPET
+	bool "Loongson HPET Timer"
+	depends on LOONGSON_MACH3X
+	select LOONGARCH_EXTERNAL_TIMER
+	help
+	  This option enables the hpet timer of LS2H or LS7A or AMD RS780/SBX00.
+
+	  If you want to enable the Loongson3 CPUFreq Driver, Please enable
+	  this option at first, otherwise, You will get wrong system time.
+
+	  If unsure, say Yes.
+
+config GS464E_NODE_COUNTER
+	bool "Loongson3 Node Counter"
+	depends on LOONGSON_MACH3X
+	select LOONGARCH_EXTERNAL_TIMER
+	help
+	  This option enables the node counter of Loongson3A(B)2000/3000/4000.
+
+	  If you want to ease the contension of AMD RS780/SBX0 HPET device space reading,
+	  Please enable this option. This option replace HPET CSRC with node counter.
+
+	  If unsure, say No.
+
+config LOONGSON_UART_BASE
+	bool
+	default y
+	depends on EARLY_PRINTK || SERIAL_8250
+
+config LOONGSON_MC146818
+	bool
+	default n
+
+config LEFI_FIRMWARE_INTERFACE
+	bool
+
+endif # MACH_LOONGSON64
